@@ -11,11 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-<<<<<<< HEAD
         Schema::create('tarefas', function (Blueprint $table) {
-=======
-        Schema::create('tarefa', function (Blueprint $table) {
->>>>>>> 2de50fa57a62931cb280ac56bd6feb15929916a6
             $table->id()->primary();
             $table->string('descricao');
             $table->timestamp('data_criacao');
