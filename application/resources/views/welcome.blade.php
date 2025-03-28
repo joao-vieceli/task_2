@@ -14,6 +14,10 @@
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
+                <th>Data Criação</th>
+                <th>Data Prevista</th>
+                <th>Data Encerramento</th>
+                <th>Situacao</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +25,10 @@
                 <tr>
                     <td>{{ $tarefa->id }}</td>
                     <td>{{ $tarefa->descricao }}</td>
+                    <td>{{ $tarefa->data_criacao }}</td>
+                    <td>{{ $tarefa->data_prevista }}</td>
+                    <td>{{ $tarefa->data_encerramento }}</td>
+                    <td>{{ $tarefa->situacao }}</td>
                 </tr>
             @endforeach
         </tbody>

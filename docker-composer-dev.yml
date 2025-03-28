@@ -26,6 +26,8 @@ services:
       build:
         context: ./application
         dockerfile: Dockerfile.dev
+      depends_on:
+        - postgres
       environment:
         DB_CONNECTION: ${DB_CONNECTION_LARAVEL}
         DB_HOST: ${DB_HOST}

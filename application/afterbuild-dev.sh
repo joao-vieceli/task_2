@@ -15,4 +15,6 @@ php artisan key:generate
 
 php artisan migrate:fresh
 
+php artisan db:seed --class=TarefaSeeder
+
 npm run dev & php artisan serve --host=0.0.0.0
