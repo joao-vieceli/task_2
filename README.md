@@ -184,7 +184,7 @@ Seguir os passos: [Instalação Docker Ubuntu](https://www.hostinger.com.br/tuto
 
 ### VM
 - **IP:** 177.44.248.66
-- **Link da Aplicação:** [Acessar](http://177.44.248.66:8081/)
+- **Link da Aplicação:** [Acessar](http://177.44.248.66:80/)
 
 ---
 

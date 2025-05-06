@@ -18,6 +18,10 @@ class Tarefa extends Model
     protected $fillable = [
         'id',
         'descricao',
+        'data_criacao',
+        'data_prevista',
+        'data_encerramento',
+        'situacao'
     ];
 
 }
