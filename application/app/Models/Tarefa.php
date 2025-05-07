@@ -10,6 +10,7 @@ class Tarefa extends Model
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
+    protected $table = 'tarefas';
     /**
      * The attributes that are mass assignable.
      *
