@@ -31,8 +31,8 @@ class MailTest extends TestCase
         $response->assertRedirect();
 
         Mail::assertSent(TarefaCriadaMail::class, function ($mail) use ($user) {
-            //return $mail->hasTo($user->email);
-            return $mail->hasTo('joao.vieceli@universo.univates.br');
+            return $mail->hasTo($user->email);
+            //return $mail->hasTo('joao.vieceli@universo.univates.br');
         });
     }
 
@@ -63,13 +63,13 @@ class MailTest extends TestCase
             'id' => $tarefa->id,
             'descricao' => 'Tarefa Atualizada',
             'situacao' => 'Em Andamento',
-            'data_prevista' => now()->addDays(3)->toDateTimeString(),
-            'data_encerramento' => now()->addDays(4)->toDateTimeString(),
+            'data_prevista' => now()->addDays(3),
+            'data_encerramento' => now()->addDays(4),
         ]);
 
         // Verifique se o e-mail foi enviado
-        Mail::assertSent(TarefaEditadaMail::class, function ($mail) use ($tarefa) {
-            return $mail->hasTo('joao.vieceli@universo.univates.br') && $mail->tarefa->id === $tarefa->id;
+        Mail::assertSent(TarefaEditadaMail::class, function ($mail) use ($tarefa,$user) {
+            return $mail->hasTo($user->email) && $mail->tarefa->id === $tarefa->id;
         });
 
         $response->assertRedirect(route('tasks.index'));

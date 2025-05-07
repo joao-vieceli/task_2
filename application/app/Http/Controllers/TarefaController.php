@@ -53,10 +53,9 @@ class TarefaController extends Controller
             'situacao' => $request->situacao,
         ]);
 
-        //Mail::to(auth()->user()->email)->send(new TarefaCriadaMail($tarefa, auth()->user()));
-        Mail::to('joao.vieceli@universo.univates.br')->send(new TarefaCriadaMail($tarefa, auth()->user()));
-        //Mail::to(auth()->user()->email)->queue(new TarefaCriadaMail($tarefa, auth()->user()));
-
+        Mail::to(auth()->user()->email)->send(new TarefaCriadaMail($tarefa, auth()->user()));
+        //Mail::to('joao.vieceli@universo.univates.br')->send(new TarefaCriadaMail($tarefa, auth()->user()));
+        
         return redirect()->route('tasks.index')->with('success', 'Tarefa criada com sucesso!');
     }
 
@@ -82,7 +81,8 @@ class TarefaController extends Controller
             'situacao' => $request->situacao,
         ]);
 
-        Mail::to('joao.vieceli@universo.univates.br')->send(new TarefaEditadaMail($tarefa, auth()->user()));
+        Mail::to(auth()->user()->email)->send(new TarefaEditadaMail($tarefa, auth()->user()));
+        //Mail::to('joao.vieceli@universo.univates.br')->send(new TarefaEditadaMail($tarefa, auth()->user()));
 
         return redirect()->route('tasks.index')->with('success', 'Tarefa atualizada com sucesso!');
     }
