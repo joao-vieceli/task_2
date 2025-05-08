@@ -41,7 +41,7 @@ class TarefaController extends Controller
         $request->validate([
             'descricao' => 'required|string|max:255',
             'data_prevista' => 'nullable|date',
-            'data_encerramento' => 'nullable|date',
+            'data_encerramento' => 'nullable|date|after_or_equal:data_prevista',
             'situacao' => 'required|in:Pendente,Em Andamento,Concluída',
         ]);
 
@@ -74,14 +74,24 @@ class TarefaController extends Controller
         ]);
 
         $tarefa = Tarefa::findOrFail($id);
-        $tarefa->update([
+
+        $dadosAtualizados = [
             'descricao' => $request->descricao,
             'data_prevista' => $request->data_prevista,
             'data_encerramento' => $request->data_encerramento,
             'situacao' => $request->situacao,
-        ]);
+        ];
+        
+        $houveAlteracao = collect($dadosAtualizados)->some(function ($valor, $chave) use ($tarefa) {
+            return $tarefa->$chave != $valor;
+        });
+        
+        if ($houveAlteracao) {
+            $tarefa->update($dadosAtualizados);
+        
+            Mail::to(auth()->user()->email)->send(new TarefaEditadaMail($tarefa, auth()->user()));
+        }
 
-        Mail::to(auth()->user()->email)->send(new TarefaEditadaMail($tarefa, auth()->user()));
         //Mail::to('joao.vieceli@universo.univates.br')->send(new TarefaEditadaMail($tarefa, auth()->user()));
 
         return redirect()->route('tasks.index')->with('success', 'Tarefa atualizada com sucesso!');

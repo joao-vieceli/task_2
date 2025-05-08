@@ -24,12 +24,7 @@ class TaskTest extends TestCase
         return $user;
     }
 
-    /** Esse teste faz o login de teste e tenta criar uma tarefa genérica para testar se essa
-     * funcionalidade está funcionando. O teste verifica se a tarefa foi criada com sucesso
-     * e se os dados estão corretos no banco de dados.
-     * @test
-    */
-    public function criar_tarefa_teste()
+    public function test_criar_tarefa()
     {
 
         $user = $this->loginTest();
@@ -54,17 +49,7 @@ class TaskTest extends TestCase
         ]);
     }
 
-    /**
-     *
-     * A função `carregar_lista_de_tarefas_teste` verifica se a lista de tarefas
-     * é carregada corretamente. O teste faz o login do usuário, cria 3 tarefas
-     * e faz uma requisição GET para a rota '/tasks'. Em seguida, verifica se
-     * a resposta tem o status 200 e se o texto 'Tarefa' aparece na view.
-     *
-     * @arquivo /home/joao/projetos/task_2/application/tests/Feature/TaskTest.php
-     *
-     * @test */
-    public function carregar_lista_de_tarefas_teste()
+    public function test_carregar_lista_de_tarefas()
     {
         $this->loginTest();
 
@@ -73,14 +58,10 @@ class TaskTest extends TestCase
         $response = $this->get('/tasks');
 
         $response->assertStatus(200);
-        $response->assertSeeText('Tarefa'); // Verifica se o texto aparece na view
+        $response->assertSeeText('Tarefa');
     }
 
-    /** 
-     * Essa função 'altera_tarefa' verifica se a tarefa é alterada corretamente.
-     * 
-     * @test */
-    public function altera_tarefa_teste()
+    public function test_altera_tarefa()
     {
         $this->loginTest();
 
@@ -97,12 +78,7 @@ class TaskTest extends TestCase
         $this->assertDatabaseHas('tarefas', ['id' => $Tarefa->id, 'descricao' => 'Atualizada']);
     }
 
-    /** 
-     * 
-     * Essa função 'excluir_tarefa' verifica se a tarefa é excluída corretamente.
-     * 
-     * @test */
-    public function excluir_tarefa_teste()
+    public function test_excluir_tarefa()
     {
 
         $this->loginTest();
@@ -115,8 +91,8 @@ class TaskTest extends TestCase
         $this->assertDatabaseMissing('tarefas', ['id' => $Tarefa->id]);
     }
 
-    /** @test */
-    public function gerar_pdf_tarefas_teste()
+
+    public function test_gerar_pdf_tarefas()
     {
         $this->loginTest();
 
@@ -131,8 +107,8 @@ class TaskTest extends TestCase
         $this->assertStringStartsWith('%PDF', $response->getContent());
     }
 
-    /** @test */
-    public function filtra_tarefas_por_descricao()
+
+    public function test_filtra_tarefas_por_descricao()
     {
         $this->loginTest();
 
@@ -149,4 +125,32 @@ class TaskTest extends TestCase
         $response->assertDontSeeText('Reunião com cliente');
         $response->assertDontSeeText('Apresentação');
     }
+
+    public function test_criar_tarefa_com_data_encerramento_antes_de_hoje()
+    {
+        $this->loginTest();
+
+        $response = $this->post(route('tasks.store'), [
+            'descricao' => 'Tarefa com datas inválidas',
+            'situacao' => 'Pendente',
+            'data_prevista' => now()->addDays(3),
+            'data_encerramento' => now()->addDays(1),
+        ]);
+
+        $response->assertSessionHasErrors(['data_encerramento']);
+    }
+    
+    public function test_criar_tarefa_sem_descricao()
+    {
+        $this->loginTest();
+
+        $response = $this->post(route('tasks.store'), [
+            'situacao' => 'Pendente',
+            'data_prevista' => now()->addDays(1),
+            'data_encerramento' => now()->addDays(2),
+        ]);
+
+        $response->assertSessionHasErrors(['descricao']);
+    }
+
 }
